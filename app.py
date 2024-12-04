@@ -50,12 +50,14 @@ st.write(input_data)
 df = data.copy()
 
 # Menggunakan LabelEncoder untuk variabel kategorikal
-label_encoder = LabelEncoder()
+label_encoder_stress = LabelEncoder()
+label_encoder_env = LabelEncoder()
+label_encoder_target = LabelEncoder()
 
 # Melakukan encoding pada kolom kategorikal
-df['Stress_Level'] = label_encoder.fit_transform(df['Stress_Level'])
-df['Work_Environment_Impact'] = label_encoder.fit_transform(df['Work_Environment_Impact'])
-df['Mental_Health_Status'] = label_encoder.fit_transform(df['Mental_Health_Status'])
+df['Stress_Level'] = label_encoder_stress.fit_transform(df['Stress_Level'])
+df['Work_Environment_Impact'] = label_encoder_env.fit_transform(df['Work_Environment_Impact'])
+df['Mental_Health_Status'] = label_encoder_target.fit_transform(df['Mental_Health_Status'])
 
 # Menyiapkan data fitur dan target
 X = df[['Technology_Usage_Hours', 'Social_Media_Usage_Hours', 'Gaming_Hours',
@@ -76,18 +78,22 @@ accuracy = accuracy_score(y_test, y_pred)
 st.write(f"Akurasi model SVM: {accuracy:.2f}")
 
 # Mengonversi input pengguna ke format yang sama dengan data latih
-input_data_transformed = np.array([
-    technology_hours,
-    social_media_hours,
-    gaming_hours,
-    label_encoder.transform([stress_level])[0],
-    sleep_hours,
-    label_encoder.transform([environmental_impact])[0]
-]).reshape(1, -1)
+try:
+    input_data_transformed = np.array([
+        technology_hours,
+        social_media_hours,
+        gaming_hours,
+        label_encoder_stress.transform([stress_level])[0],
+        sleep_hours,
+        label_encoder_env.transform([environmental_impact])[0]
+    ]).reshape(1, -1)
+except ValueError as e:
+    st.error(f"Input error: {e}")
+    st.stop()
 
 # Melakukan prediksi dengan model SVM
 prediction_prob = svm_model.predict_proba(input_data_transformed)
-predicted_class = label_encoder.inverse_transform([np.argmax(prediction_prob)])
+predicted_class = label_encoder_target.inverse_transform([np.argmax(prediction_prob)])
 
 st.write(f"Prediksi dampak mental: {predicted_class[0]}")
 st.write(f"Probabilitas masing-masing kelas: {prediction_prob[0]}")
