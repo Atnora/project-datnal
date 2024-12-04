@@ -8,7 +8,7 @@ st.title("Mental Health and Technology Usage Dashboard")
 @st.cache
 def load_data():
     # Ganti dengan path dataset kamu jika ada di folder lain
-    data = pd.read_csv('D:\UMN\SEMESTER 3\Data Analysis\mental_health_and_technology_usage_2024.csv')
+    data = pd.read_csv('mental_health_and_technology_usage_2024.csv')
     return data
 
 # Memuat data
