@@ -32,7 +32,7 @@ st.write(data.head())  # Menampilkan beberapa baris pertama untuk verifikasi
 technology_hours = st.number_input("Masukkan jam penggunaan teknologi (integer)", min_value=0, max_value=24)
 social_media_hours = st.number_input("Masukkan jam penggunaan media sosial (integer)", min_value=0, max_value=24)
 gaming_hours = st.number_input("Masukkan jam bermain game (integer)", min_value=0, max_value=24)
-Stress_Level = st.selectbox("Pilih tingkat stres", ["Low", "Medium", "High"])
+stress_level = st.selectbox("Pilih tingkat stres", ["Low", "Medium", "High"])
 sleep_hours = st.number_input("Masukkan jam tidur (integer)", min_value=0, max_value=24)
 environmental_impact = st.selectbox("Pilih dampak lingkungan kerja", ["Positive", "Negative"])
 
@@ -41,7 +41,7 @@ input_data = {
     "Technology Usage (hours)": technology_hours,
     "Social Media Usage (hours)": social_media_hours,
     "Gaming Hours": gaming_hours,
-    "Stress Level": Stress_Level,
+    "stress_level": stress_level,
     "Sleep Hours": sleep_hours,
     "Environmental Impact": environmental_impact
 }
@@ -59,7 +59,7 @@ df = data.copy()
 label_encoder = LabelEncoder()
 
 # Melakukan encoding pada kolom kategorikal (ubah sesuai nama kolom yang tepat di dataset Anda)
-df['Stress Level'] = label_encoder.fit_transform(df['Stress Level'])
+df['stress_level'] = label_encoder.fit_transform(df['stress_level'])
 df['Environmental Impact'] = label_encoder.fit_transform(df['Environmental Impact'])
 df['Mental Health Impact'] = label_encoder.fit_transform(df['Mental Health Impact'])
 
@@ -86,7 +86,7 @@ input_data_transformed = np.array([
     technology_hours,
     social_media_hours,
     gaming_hours,
-    label_encoder.transform([Stress_Level])[0],
+    label_encoder.transform([stress_level])[0],
     sleep_hours,
     label_encoder.transform([environmental_impact])[0]
 ]).reshape(1, -1)
